@@ -5,14 +5,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 public class AssertionsTest {
+    private WebDriver driver;
+    private final SoftAssert softAssert = new SoftAssert();
 
-    SoftAssert softAssert = new SoftAssert();
-    WebDriver driver;
 
     @BeforeMethod
     public void setUp() {
@@ -20,6 +21,13 @@ public class AssertionsTest {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("https://www.lambdatest.com/selenium-playground/");
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @Test
@@ -45,9 +53,9 @@ public class AssertionsTest {
 
         // Soft assertion - continues execution after a failure.
         // It is best to use a Soft Assert if you are verifying more than one result.
-        softAssert.assertEquals(actualGender, "Male",
+        softAssert.assertEquals(actualGender, "Other",
                 "\n Actual Gender Is Not Correct \n");
-        softAssert.assertTrue(actualAgeGroup.contains("34"),
+        softAssert.assertTrue(actualAgeGroup.contains("5 - 15"),
                 "\n Actual Age Group Is Not Correct \n");
         // If you use softAssert, remember to always add assertAll() at the end.
         softAssert.assertAll("\n Optional Message \n");

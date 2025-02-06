@@ -1,6 +1,5 @@
 package DemoTestNG;
 
-import com.google.common.base.Function;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -19,21 +18,21 @@ import org.testng.annotations.Test;
 import java.time.Duration;
 
 public class DynamicWaits {
-
-    WebDriver driver;
+    private WebDriver driver;
 
     @BeforeMethod
     public void setUp() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.get("https://www.lambdatest.com/selenium-playground/");
     }
 
     @AfterMethod
     public void tearDown() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @Test
@@ -57,25 +56,21 @@ public class DynamicWaits {
 
         // Waiting 30 seconds for an element to be present on the page, checking
         // for its presence once every 100 Milliseconds.
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
-                .withTimeout(Duration.ofSeconds(30L))
+        Wait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(30))
                 .pollingEvery(Duration.ofMillis(100))
                 .ignoring(NoSuchElementException.class);
 
-        WebElement element = wait.until(new Function<WebDriver, WebElement>() {
-            public WebElement apply(WebDriver driver) {
-                WebElement progress = driver.findElement(
-                        By.xpath("//div[@id='dialog']//div[@class='progress-label']")
-                );
-                String progressBarText = progress.getText();
+        WebElement element = wait.until(driver -> {
+            WebElement progress = driver.findElement(By.xpath("//div[@id='dialog']//div[@class='progress-label']"));
+            String progressBarText = progress.getText();
 
-                if (progressBarText.equals("Complete!")) {
-                    System.out.println("Progress Is Complete!");
-                    return progress;
-                } else {
-                    System.out.println(progressBarText);
-                    return null;
-                }
+            if ("Complete!".equals(progressBarText)) {
+                System.out.println("Progress Is Complete!");
+                return progress;
+            } else {
+                System.out.println(progressBarText);
+                return null;
             }
         });
     }
