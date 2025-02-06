@@ -4,11 +4,13 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 public class ParameterizedTest {
-
-    WebDriver driver;
+    private WebDriver driver;
 
     @Parameters({"URL"})
     @BeforeClass
@@ -19,6 +21,13 @@ public class ParameterizedTest {
 
         // Step 1: Load The AUT
         driver.get(url);
+    }
+
+    @AfterClass
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @Test
@@ -35,10 +44,5 @@ public class ParameterizedTest {
 
         // Step 5: Click The Download Link
         driver.findElement(By.id("link-to-download")).click();
-    }
-
-    @AfterClass
-    public void tearDown() {
-        driver.quit();
     }
 }

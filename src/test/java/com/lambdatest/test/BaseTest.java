@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class BaseTest {
-
     private WebDriver driver;
     protected BasePage basePage;
     protected HomePage homePage;
@@ -33,7 +32,9 @@ public class BaseTest {
 
     @AfterClass
     public void tearDown() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @BeforeMethod

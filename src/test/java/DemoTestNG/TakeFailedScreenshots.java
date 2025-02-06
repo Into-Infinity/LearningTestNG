@@ -17,8 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class TakeFailedScreenshots {
-
-    WebDriver driver;
+    private WebDriver driver;
 
     @BeforeMethod
     public void setUp() {
@@ -26,18 +25,6 @@ public class TakeFailedScreenshots {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("https://www.lambdatest.com/selenium-playground/");
-    }
-
-    @Test
-    public void testSimpleFormDemo() {
-        driver.findElement(By.linkText("Simple Form Demo")).click();
-        driver.findElement(By.xpath("//p[text()='Enter Message']//following-sibling::input"))
-                .sendKeys("LambdaTest Is Awesome!!!");
-        driver.findElement(By.id("showInput")).click();
-        String actualMessage = driver.findElement(By.id("message")).getText();
-
-        Assert.assertEquals(actualMessage, "LambdaTest Is Awesome!!!",
-                "\n Message Is Not LambdaTest Is Awesome!!! \n");
     }
 
     @AfterMethod
@@ -54,5 +41,21 @@ public class TakeFailedScreenshots {
                 ioException.printStackTrace();
             }
         }
+
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    @Test
+    public void testSimpleFormDemo() {
+        driver.findElement(By.linkText("Simple Form Demo")).click();
+        driver.findElement(By.xpath("//p[text()='Enter Message']//following-sibling::input"))
+                .sendKeys("LambdaTest Is Awesome!!!");
+        driver.findElement(By.id("showInput")).click();
+        String actualMessage = driver.findElement(By.id("message")).getText();
+
+        Assert.assertEquals(actualMessage, "LambdaTest Is Awesome!!!",
+                "\n Message Is Not LambdaTest Is Awesome!!! \n");
     }
 }

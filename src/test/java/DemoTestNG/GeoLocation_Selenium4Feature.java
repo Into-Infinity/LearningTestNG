@@ -24,6 +24,13 @@ public class GeoLocation_Selenium4Feature {
         driver.manage().window().maximize();
     }
 
+    @AfterMethod
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
     private void mockGeoLocation(double latitude, double longitude, int accuracy) {
         Map<String, Object> coordinates = new HashMap<>();
         coordinates.put("latitude", latitude);
@@ -44,13 +51,6 @@ public class GeoLocation_Selenium4Feature {
 
         Assert.assertEquals(actualLocation,
                 "Sheikh Mohammed bin Rashid Boulevard 1, Dubai, United Arab Emirates",
-                "GeoLocation does not match expected location!");
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+                " \n GeoLocation does not match expected location! \n");
     }
 }
